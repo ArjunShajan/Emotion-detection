@@ -11,9 +11,6 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping, ModelCheckpoint
 import os
 
-# ---------------------------
-# 1. Load FER2013 dataset
-# ---------------------------
 print("Loading dataset...")
 data = pd.read_csv("fer2013.csv")
 
@@ -34,9 +31,6 @@ X_train, X_val, y_train, y_val = train_test_split(
 print(f"Training samples: {X_train.shape[0]}")
 print(f"Validation samples: {X_val.shape[0]}")
 
-# ---------------------------
-# 2. Mini-XCEPTION model
-# ---------------------------
 def mini_xception(input_shape, num_classes):
     input_img = Input(shape=input_shape)
 
@@ -83,9 +77,7 @@ model = mini_xception((48, 48, 1), 7)
 model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
 model.summary()
 
-# ---------------------------
-# 3. Training setup
-# ---------------------------
+
 checkpoint_path = "fer2013_mini_XCEPTION_best.hdf5"
 
 callbacks = [
@@ -94,9 +86,7 @@ callbacks = [
     ModelCheckpoint(checkpoint_path, monitor='val_accuracy', save_best_only=True, verbose=1)
 ]
 
-# ---------------------------
-# 4. Train the model
-# ---------------------------
+
 print("Starting training...")
 history = model.fit(
     X_train, y_train,
@@ -107,9 +97,7 @@ history = model.fit(
     verbose=1
 )
 
-# ---------------------------
-# 5. Save final model
-# ---------------------------
+
 final_path = "fer2013_mini_XCEPTION_final.hdf5"
 model.save(final_path)
 print(f"Training complete. Model saved at {final_path}")
